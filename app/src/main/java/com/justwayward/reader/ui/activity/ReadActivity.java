@@ -24,6 +24,7 @@ import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -88,6 +89,7 @@ import com.justwayward.reader.view.readview.PageWidget;
 import com.sinovoice.hcicloudsdk.android.tts.player.TTSPlayer;
 import com.sinovoice.hcicloudsdk.common.tts.TtsConfig;
 import com.sinovoice.hcicloudsdk.player.TTSCommonPlayer;
+import com.tory.reader.util.JMHandler;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -357,7 +359,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View 
     /**
      * 时刻监听系统亮度改变事件
      */
-    private ContentObserver Brightness = new ContentObserver(new Handler()) {
+    private ContentObserver Brightness = new ContentObserver(new JMHandler(Looper.getMainLooper(), null)) {
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
@@ -369,6 +371,9 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View 
     };
 
 
+    /**
+     * 初始化字体设置
+     */
     private void initAASet() {
         curTheme = SettingManager.getInstance().getReadTheme();
         ThemeManager.setReaderTheme(curTheme, mRlBookReadRoot);
